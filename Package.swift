@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "ATOCR",
     platforms: [
-        .iOS(.v12)
+        .iOS(.v13)
     ],
     products: [
         .library(
@@ -15,11 +15,16 @@ let package = Package(
         ),
     ],
     dependencies: [
-        
+        .package(url: "https://github.com/AyanTech/AyanTechNetworkingLibrary-iOS", branch: "master"),
+        .package(url: "https://github.com/sepbehroozi/SwiftBooster.git", branch: "master"),
     ],
     targets: [
         .target(
-            name: "ATOCR"
+            name: "ATOCR",
+            dependencies: [
+                .product(name: "AyanTechNetworkingLibrary", package: "AyanTechNetworkingLibrary-iOS"),
+                .product(name: "SwiftBooster", package: "SwiftBooster")
+            ]
         ),
         .testTarget(
             name: "ATOCRTests",
