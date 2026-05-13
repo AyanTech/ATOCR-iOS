@@ -23,14 +23,15 @@ class OCRCollectionViewCell: UICollectionViewCell {
         self.titleLabel.text = data.title
         self.titleLabel.textColor = data.titleColor
         self.titleLabel.font = data.titleFont
-        self.checkmarkImage.image = UIImage.checkmark
-        self.checkmarkImage.tintColor = .green
+        self.titleLabel.textAlignment = .center
+        self.imageView.layer.cornerRadius = 16
         self.containerView.layer.sublayers?.removeAll(where: { $0.name == "dashedBorderLayer" })
         let dashedLayer = CAShapeLayer()
         dashedLayer.name = "dashedBorderLayer"
         containerView.addDashedBorder(shapeLayer: dashedLayer,
-                                      color: .blue,
-                                      linePattern: [7, 6],
+                                      color: data.borderColor,
+                                      cornerRadius: data.borderRadius,
+                                      linePattern: [4, 4],
                                       addSubView: true)
     }
 }

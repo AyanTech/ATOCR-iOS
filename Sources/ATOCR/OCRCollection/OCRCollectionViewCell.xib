@@ -27,11 +27,11 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qaq-Av-cPe">
                         <rect key="frame" x="24" y="8" width="64" height="64"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="a7M-jh-aDb">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ocr_camera" translatesAutoresizingMaskIntoConstraints="NO" id="a7M-jh-aDb">
                                 <rect key="frame" x="2" y="2" width="60" height="60"/>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0Wu-iE-9TF">
-                                <rect key="frame" x="52" y="52" width="24" height="24"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ocr_checkmark" translatesAutoresizingMaskIntoConstraints="NO" id="0Wu-iE-9TF">
+                                <rect key="frame" x="-12" y="52" width="24" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="24" id="JGW-7c-0rG"/>
                                     <constraint firstAttribute="width" constant="24" id="fhg-fe-hCH"/>
@@ -41,8 +41,8 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="a7M-jh-aDb" firstAttribute="leading" secondItem="qaq-Av-cPe" secondAttribute="leading" constant="2" id="BDE-Ix-d6I"/>
+                            <constraint firstItem="0Wu-iE-9TF" firstAttribute="leading" secondItem="qaq-Av-cPe" secondAttribute="leading" constant="-12" id="TDA-fE-dJE"/>
                             <constraint firstAttribute="bottom" secondItem="0Wu-iE-9TF" secondAttribute="bottom" constant="-12" id="aGq-jp-2wp"/>
-                            <constraint firstAttribute="trailing" secondItem="0Wu-iE-9TF" secondAttribute="trailing" constant="-12" id="awq-eW-ST7"/>
                             <constraint firstAttribute="height" constant="64" id="hJp-YC-Rgr"/>
                             <constraint firstItem="a7M-jh-aDb" firstAttribute="top" secondItem="qaq-Av-cPe" secondAttribute="top" constant="2" id="sBL-PA-5xV"/>
                             <constraint firstAttribute="bottom" secondItem="a7M-jh-aDb" secondAttribute="bottom" constant="2" id="uhA-tw-ePj"/>
@@ -67,4 +67,8 @@
             <point key="canvasLocation" x="167.93893129770993" y="169.36619718309859"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="ocr_camera" width="60" height="60"/>
+        <image name="ocr_checkmark" width="24" height="24"/>
+    </resources>
 </document>
