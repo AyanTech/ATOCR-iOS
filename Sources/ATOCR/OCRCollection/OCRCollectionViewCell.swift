@@ -26,7 +26,7 @@ class OCRCollectionViewCell: UICollectionViewCell {
         self.titleLabel.textAlignment = .center
         self.imageView.layer.cornerRadius = 16
         self.imageView.image = data.image ?? UIImage(named: "ocr_camera")
-        self.checkmarkImage.isHidden = true
+        self.checkmarkImage.isHidden = data.image != nil
         self.containerView.layer.sublayers?.removeAll(where: { $0.name == "dashedBorderLayer" })
         let dashedLayer = CAShapeLayer()
         dashedLayer.name = "dashedBorderLayer"
