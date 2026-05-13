@@ -43,16 +43,16 @@ extension ATOCRCameraManager: UIImagePickerControllerDelegate,
                                       didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         let image = info[.originalImage] as? UIImage
 
+        self.delegate?.cameraManager(self, didCapture: image)
         picker.dismiss(animated: true) { [weak self] in
             guard let self else { return }
-            self.delegate?.cameraManager(self, didCapture: image)
         }
     }
 
     public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.delegate?.cameraManager(self, didCapture: nil)
         picker.dismiss(animated: true) { [weak self] in
             guard let self else { return }
-            self.delegate?.cameraManager(self, didCapture: nil)
         }
     }
 }
