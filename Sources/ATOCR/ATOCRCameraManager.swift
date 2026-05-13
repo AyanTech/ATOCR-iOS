@@ -6,40 +6,53 @@
 //
 import UIKit
 
+// MARK: - Delegate
+public protocol ATOCRCameraManagerDelegate: AnyObject {
+    func cameraManager(_ manager: ATOCRCameraManager, didCapture image: UIImage?)
+}
+
+// MARK: - Manager
 public final class ATOCRCameraManager: NSObject {
 
-    private var completion: ((UIImage?) -> Void)?
+    public weak var delegate: ATOCRCameraManagerDelegate?
 
-    public override init() {}
+    public override init() {
+        super.init()
+    }
 
-    @MainActor public func openCamera(from viewController: UIViewController,
-                                      completion: @escaping (UIImage?) -> Void) {
+    @MainActor
+    public func openCamera(from viewController: UIViewController) {
         guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
-            completion(nil)
+            delegate?.cameraManager(self, didCapture: nil)
             return
         }
 
-        self.completion = completion
         let picker = UIImagePickerController()
         picker.sourceType = .camera
         picker.delegate = self
+
         viewController.present(picker, animated: true)
     }
 }
 
-// MARK: - Delegate
+// MARK: - UIImagePickerControllerDelegate
 extension ATOCRCameraManager: UIImagePickerControllerDelegate,
                               UINavigationControllerDelegate {
 
     public func imagePickerController(_ picker: UIImagePickerController,
-                                      didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+                                      didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         let image = info[.originalImage] as? UIImage
-        picker.dismiss(animated: true)
-        completion?(image)
+
+        picker.dismiss(animated: true) { [weak self] in
+            guard let self else { return }
+            self.delegate?.cameraManager(self, didCapture: image)
+        }
     }
 
     public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        picker.dismiss(animated: true)
-        completion?(nil)
+        picker.dismiss(animated: true) { [weak self] in
+            guard let self else { return }
+            self.delegate?.cameraManager(self, didCapture: nil)
+        }
     }
 }
