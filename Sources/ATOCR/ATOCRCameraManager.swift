@@ -8,25 +8,26 @@ import UIKit
 
 // MARK: - Delegate
 public protocol ATOCRCameraManagerDelegate: AnyObject {
-    func cameraManager(_ manager: ATOCRCameraManager, didCapture image: UIImage?)
+    func cameraManager(_ manager: ATOCRCameraManager, didCapture image: UIImage?, guid: String?)
 }
 
 // MARK: - Manager
 public final class ATOCRCameraManager: NSObject {
 
     public weak var delegate: ATOCRCameraManagerDelegate?
-
+    private var guid: String?
+    
     public override init() {
         super.init()
     }
 
     @MainActor
-    public func openCamera(from viewController: UIViewController) {
+    public func openCamera(from viewController: UIViewController, guid: String) {
         guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
-            delegate?.cameraManager(self, didCapture: nil)
+            delegate?.cameraManager(self, didCapture: nil, guid: guid)
             return
         }
-
+        self.guid = guid
         let picker = UIImagePickerController()
         picker.sourceType = .camera
         picker.delegate = self
@@ -45,14 +46,14 @@ extension ATOCRCameraManager: UIImagePickerControllerDelegate,
 
         picker.dismiss(animated: true) { [weak self] in
             guard let self else { return }
-            self.delegate?.cameraManager(self, didCapture: image)
+            self.delegate?.cameraManager(self, didCapture: image, guid: guid)
         }
     }
 
     public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true) { [weak self] in
             guard let self else { return }
-            self.delegate?.cameraManager(self, didCapture: nil)
+            self.delegate?.cameraManager(self, didCapture: nil, guid: guid)
         }
     }
 }
