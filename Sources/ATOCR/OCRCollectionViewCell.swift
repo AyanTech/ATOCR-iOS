@@ -42,9 +42,11 @@ extension OCRCollectionViewCell {
     
     func configure(
         title: String,
+        titleFont: UIFont = UIFont.systemFont(ofSize: 12, weight: .medium),
         image: UIImage?
     ) {
         titleLabel.text = title
+        titleLabel.font = titleFont
         imageView.image = image
     }
 }
@@ -71,7 +73,6 @@ private extension OCRCollectionViewCell {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 2
-        titleLabel.font = .systemFont(ofSize: 14, weight: .medium)
         
         contentView.addSubview(titleLabel)
         

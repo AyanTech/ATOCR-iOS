@@ -112,12 +112,12 @@ extension OCRView: UICollectionViewDelegateFlowLayout {
     ) -> CGSize {
         
         let width = (
-            collectionView.bounds.width - 12
-        ) / 2
+            collectionView.bounds.width - 64
+        ) / 4
         
         return CGSize(
             width: width,
-            height: width + 50
+            height: width
         )
     }
 }
