@@ -30,8 +30,8 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="a7M-jh-aDb">
                                 <rect key="frame" x="2" y="2" width="60" height="60"/>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkmark.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="0Wu-iE-9TF">
-                                <rect key="frame" x="52" y="52.666666666666664" width="24" height="22.666666666666679"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0Wu-iE-9TF">
+                                <rect key="frame" x="52" y="52" width="24" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="24" id="JGW-7c-0rG"/>
                                     <constraint firstAttribute="width" constant="24" id="fhg-fe-hCH"/>
@@ -59,7 +59,7 @@
             </constraints>
             <size key="customSize" width="112" height="111"/>
             <connections>
-                <outlet property="checkmarkImage" destination="0Wu-iE-9TF" id="tOC-op-bqC"/>
+                <outlet property="checkmarkImage" destination="0Wu-iE-9TF" id="7Nl-ef-bFL"/>
                 <outlet property="containerView" destination="qaq-Av-cPe" id="X4s-f3-lax"/>
                 <outlet property="imageView" destination="a7M-jh-aDb" id="DD8-kQ-hCC"/>
                 <outlet property="titleLabel" destination="Tdr-Cb-cXh" id="9QI-kS-Yym"/>
@@ -67,7 +67,4 @@
             <point key="canvasLocation" x="167.93893129770993" y="169.36619718309859"/>
         </collectionViewCell>
     </objects>
-    <resources>
-        <image name="checkmark.circle.fill" catalog="system" width="128" height="123"/>
-    </resources>
 </document>
