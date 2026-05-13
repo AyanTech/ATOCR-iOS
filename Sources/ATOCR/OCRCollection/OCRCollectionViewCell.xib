@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24128" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24063"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="OCRCollectionViewCell" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="112" height="111"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="112" height="111"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tdr-Cb-cXh">
+                        <rect key="frame" x="35" y="83" width="42" height="21"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qaq-Av-cPe">
+                        <rect key="frame" x="24" y="8" width="64" height="64"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="a7M-jh-aDb">
+                                <rect key="frame" x="2" y="2" width="60" height="60"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkmark.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="0Wu-iE-9TF">
+                                <rect key="frame" x="52" y="52.666666666666664" width="24" height="22.666666666666679"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="24" id="JGW-7c-0rG"/>
+                                    <constraint firstAttribute="width" constant="24" id="fhg-fe-hCH"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="a7M-jh-aDb" firstAttribute="leading" secondItem="qaq-Av-cPe" secondAttribute="leading" constant="2" id="BDE-Ix-d6I"/>
+                            <constraint firstAttribute="bottom" secondItem="0Wu-iE-9TF" secondAttribute="bottom" constant="-12" id="aGq-jp-2wp"/>
+                            <constraint firstAttribute="trailing" secondItem="0Wu-iE-9TF" secondAttribute="trailing" constant="-12" id="awq-eW-ST7"/>
+                            <constraint firstAttribute="height" constant="64" id="hJp-YC-Rgr"/>
+                            <constraint firstItem="a7M-jh-aDb" firstAttribute="top" secondItem="qaq-Av-cPe" secondAttribute="top" constant="2" id="sBL-PA-5xV"/>
+                            <constraint firstAttribute="bottom" secondItem="a7M-jh-aDb" secondAttribute="bottom" constant="2" id="uhA-tw-ePj"/>
+                            <constraint firstAttribute="width" constant="64" id="wg2-z1-mU6"/>
+                            <constraint firstAttribute="trailing" secondItem="a7M-jh-aDb" secondAttribute="trailing" constant="2" id="zav-Bw-cqn"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstItem="qaq-Av-cPe" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="7iT-iN-xQh"/>
+                <constraint firstItem="qaq-Av-cPe" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="8" id="l8t-bM-BQr"/>
+            </constraints>
+            <size key="customSize" width="112" height="111"/>
+            <connections>
+                <outlet property="checkmarkImage" destination="0Wu-iE-9TF" id="tOC-op-bqC"/>
+                <outlet property="containerView" destination="qaq-Av-cPe" id="X4s-f3-lax"/>
+                <outlet property="imageView" destination="a7M-jh-aDb" id="DD8-kQ-hCC"/>
+                <outlet property="titleLabel" destination="Tdr-Cb-cXh" id="9QI-kS-Yym"/>
+            </connections>
+            <point key="canvasLocation" x="167.93893129770993" y="169.36619718309859"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="checkmark.circle.fill" catalog="system" width="128" height="123"/>
+    </resources>
+</document>

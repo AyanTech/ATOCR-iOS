@@ -9,7 +9,7 @@ import UIKit
 
 public final class OCRView: UIView {
     
-    private var items: [CollectionItem] = []
+    private var items: [OCRCollectionItem] = []
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -26,17 +26,11 @@ public final class OCRView: UIView {
         view.backgroundColor = .clear
         view.delegate = self
         view.dataSource = self
-        
-        view.register(
-            OCRCollectionViewCell.self,
-            forCellWithReuseIdentifier: OCRCollectionViewCell.identifier
-        )
-        
+        OCRCollectionViewCell.register(for: view)
         return view
     }()
     
     // MARK: - Init
-    
     public override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -48,18 +42,15 @@ public final class OCRView: UIView {
 }
 
 public extension OCRView {
-    
-    func setItems(_ items: [CollectionItem]) {
+    func setItems(_ items: [OCRCollectionItem]) {
         self.items = items
         collectionView.reloadData()
     }
 }
 
 private extension OCRView {
-    
     func setupUI() {
         addSubview(collectionView)
-        
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: topAnchor),
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -72,55 +63,34 @@ private extension OCRView {
 
 extension OCRView: UICollectionViewDataSource {
     
-    public func collectionView(
-        _ collectionView: UICollectionView,
-        numberOfItemsInSection section: Int
-    ) -> Int {
-        items.count
+    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return items.count
     }
     
-    public func collectionView(
-        _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath
-    ) -> UICollectionViewCell {
-        
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: OCRCollectionViewCell.identifier,
-            for: indexPath
-        ) as? OCRCollectionViewCell else {
-            return UICollectionViewCell()
-        }
+    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OCRCollectionViewCell.nameOfClass,
+                                                      for: indexPath) as? OCRCollectionViewCell
         
         let item = items[indexPath.item]
-        cell.configure(
-            title: item.title,
-            titleFont: item.titleFont,
-            titleColor: item.titleColor,
-            image: item.image
-        )
-        
-        return cell
+        let data = OCRCollectionItem(title: item.title,
+                                     titleColor: item.titleColor,
+                                     titleFont: item.titleFont,
+                                     image: item.image)
+        cell?.config(data: data)
+        return cell ?? UICollectionViewCell()
     }
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
-
 extension OCRView: UICollectionViewDelegateFlowLayout {
     
-    public func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAt indexPath: IndexPath
-    ) -> CGSize {
+    public func collectionView(_ collectionView: UICollectionView,
+                               layout collectionViewLayout: UICollectionViewLayout,
+                               sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let width = (
-            collectionView.bounds.width - 64
-        ) / 4
+        let width = (collectionView.bounds.width - 64) / 4
         
-        return CGSize(
-            width: width,
-            height: width
-        )
+        return CGSize(width: width, height: width)
     }
 }
 
