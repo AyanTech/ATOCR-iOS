@@ -36,8 +36,10 @@ class OCRCollectionViewCell: UICollectionViewCell {
 
 extension UICollectionViewCell {
     class func register(for collectionView: UICollectionView) {
-        collectionView.register(UINib(nibName: self.nameOfClass, bundle: Bundle.main),
-                                forCellWithReuseIdentifier: self.nameOfClass)
+        collectionView.register(
+            UINib(nibName: self.nameOfClass, bundle: .module),
+            forCellWithReuseIdentifier: self.nameOfClass
+        )
     }
 }
 
