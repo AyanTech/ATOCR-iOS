@@ -28,9 +28,9 @@ extension GetCardOcrResultPO {
                     self.emit(.didError(error))
                 } else {
                     if response?.retryable ?? false {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + (response?.nextCallInterval ?? 0)) {
-                            self.getCardOcrResult(url: url, input: input)
-                        }
+//                        DispatchQueue.main.asyncAfter(deadline: .now() + (response?.nextCallInterval ?? 0)) {
+//                            self.getCardOcrResult(url: url, input: input)
+//                        }
                     } else {
                         self.getCardOcrResultResponse = response
                         self.emit(.didSuccess)
