@@ -23,8 +23,8 @@ class OCRCollectionViewCell: UICollectionViewCell {
         self.titleLabel.text = data.title
         self.titleLabel.textColor = data.titleColor
         self.titleLabel.font = data.titleFont
-//        self.checkmarkImage.image = UIImage.checkmark
-//        self.checkmarkImage.tintColor = .green
+        self.checkmarkImage.image = UIImage.checkmark
+        self.checkmarkImage.tintColor = .green
         self.containerView.layer.sublayers?.removeAll(where: { $0.name == "dashedBorderLayer" })
         let dashedLayer = CAShapeLayer()
         dashedLayer.name = "dashedBorderLayer"

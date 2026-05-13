@@ -10,7 +10,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="OCRCollectionViewCell" customModuleProvider="target">
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="OCRCollectionViewCell" customModule="ATOCR">
             <rect key="frame" x="0.0" y="0.0" width="112" height="111"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -59,9 +59,9 @@
             </constraints>
             <size key="customSize" width="112" height="111"/>
             <connections>
-                <outlet property="checkmarkImage" destination="0Wu-iE-9TF" id="7Nl-ef-bFL"/>
-                <outlet property="containerView" destination="qaq-Av-cPe" id="X4s-f3-lax"/>
-                <outlet property="imageView" destination="a7M-jh-aDb" id="DD8-kQ-hCC"/>
+                <outlet property="checkmarkImage" destination="0Wu-iE-9TF" id="8xK-t6-zc1"/>
+                <outlet property="containerView" destination="qaq-Av-cPe" id="M93-sV-V6z"/>
+                <outlet property="imageView" destination="a7M-jh-aDb" id="OdM-iU-aIL"/>
                 <outlet property="titleLabel" destination="Tdr-Cb-cXh" id="9QI-kS-Yym"/>
             </connections>
             <point key="canvasLocation" x="167.93893129770993" y="169.36619718309859"/>
