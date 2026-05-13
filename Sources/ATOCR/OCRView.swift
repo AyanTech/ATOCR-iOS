@@ -94,6 +94,8 @@ extension OCRView: UICollectionViewDataSource {
         let item = items[indexPath.item]
         cell.configure(
             title: item.title,
+            titleFont: item.titleFont,
+            titleColor: item.titleColor,
             image: item.image
         )
         

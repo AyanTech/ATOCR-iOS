@@ -42,11 +42,13 @@ extension OCRCollectionViewCell {
     
     func configure(
         title: String,
-        titleFont: UIFont = UIFont.systemFont(ofSize: 12, weight: .medium),
+        titleFont: UIFont,
+        titleColor: UIColor,
         image: UIImage?
     ) {
         titleLabel.text = title
         titleLabel.font = titleFont
+        titleLabel.textColor = titleColor
         imageView.image = image
     }
 }
