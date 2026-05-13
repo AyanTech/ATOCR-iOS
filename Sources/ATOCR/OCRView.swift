@@ -7,8 +7,13 @@
 
 import UIKit
 
+public protocol OCRViewDelegate: AnyObject {
+    func ocrViewDidSelectItem(_ item: OCRCollectionItem)
+}
+
 public final class OCRView: UIView {
 
+    public weak var delegate: OCRViewDelegate?
     private var items: [OCRCollectionItem] = []
 
     private lazy var collectionView: UICollectionView = {
@@ -72,22 +77,16 @@ private extension OCRView {
 
 extension OCRView: UICollectionViewDataSource {
 
-    public func collectionView(
-        _ collectionView: UICollectionView,
-        numberOfItemsInSection section: Int
-    ) -> Int {
+    public func collectionView(_ collectionView: UICollectionView,
+                               numberOfItemsInSection section: Int) -> Int {
         items.count
     }
 
-    public func collectionView(
-        _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath
-    ) -> UICollectionViewCell {
+    public func collectionView(_ collectionView: UICollectionView,
+                               cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: OCRCollectionViewCell.nameOfClass,
-            for: indexPath
-        ) as? OCRCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OCRCollectionViewCell.nameOfClass,
+                                                            for: indexPath) as? OCRCollectionViewCell else {
             return UICollectionViewCell()
         }
 
@@ -97,13 +96,17 @@ extension OCRView: UICollectionViewDataSource {
     }
 }
 
-extension OCRView: UICollectionViewDelegateFlowLayout {
+extension OCRView: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate {
+    
+    public func collectionView(_ collectionView: UICollectionView,
+                               didSelectItemAt indexPath: IndexPath) {
+        let item = items[indexPath.item]
+        delegate?.ocrViewDidSelectItem(item)
+    }
 
-    public func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAt indexPath: IndexPath
-    ) -> CGSize {
+    public func collectionView(_ collectionView: UICollectionView,
+                               layout collectionViewLayout: UICollectionViewLayout,
+                               sizeForItemAt indexPath: IndexPath) -> CGSize {
 
         let itemsPerRow: CGFloat = 4
         let spacing: CGFloat = 12
