@@ -115,13 +115,19 @@ private extension OCRCollectionViewCell {
 
 public struct CollectionItem {
     public let title: String
+    public let titleColor: UIColor
+    public let titleFont: UIFont
     public let image: UIImage?
     
     public init(
         title: String,
+        titleColor: UIColor,
+        titleFont: UIFont,
         image: UIImage?
     ) {
         self.title = title
+        self.titleColor = titleColor
+        self.titleFont = titleFont
         self.image = image
     }
 }
