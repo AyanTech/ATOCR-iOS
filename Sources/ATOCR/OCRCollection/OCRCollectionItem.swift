@@ -9,19 +9,24 @@ import UIKit
 
 public struct OCRCollectionItem {
     public let guid: String
+    public let type: OCRType
     public let title: String
     public let titleColor: UIColor
     public let titleFont: UIFont
     public let borderColor: UIColor
     public let borderRadius: CGFloat
     public var image: UIImage?
+    public var compressImageBase64: String?
     
-    public init(title: String,
+    public init(type: OCRType,
+                title: String,
                 titleColor: UIColor,
                 titleFont: UIFont,
                 borderColor: UIColor,
                 borderRadius: CGFloat,
-                image: UIImage?) {
+                image: UIImage?,
+                compressImageBase64: String?) {
+        self.type = type
         self.guid = UUID().uuidString
         self.title = title
         self.titleColor = titleColor
@@ -29,5 +34,6 @@ public struct OCRCollectionItem {
         self.borderColor = borderColor
         self.borderRadius = borderRadius
         self.image = image
+        self.compressImageBase64 = compressImageBase64
     }
 }

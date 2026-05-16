@@ -7,10 +7,11 @@
 import UIKit
 
 extension UIImage {
-    func compressedData(to maxSizeMB: Double) -> Data? {
+    func compressedData(maxSizeMB: Double,
+                        minCompression: CGFloat = 0.1 ,
+                        resizeStep: CGFloat = 0.9) -> Data? {
         let maxBytes = Int(maxSizeMB * 1024 * 1024)
-        var compression: CGFloat = 0.9
-        let minCompression: CGFloat = 0.1
+        var compression: CGFloat = resizeStep
         guard var imageData = self.jpegData(compressionQuality: compression) else { return nil }
         
         while imageData.count > maxBytes && compression > minCompression {
