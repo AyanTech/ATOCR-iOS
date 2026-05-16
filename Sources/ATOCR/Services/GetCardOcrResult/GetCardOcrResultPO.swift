@@ -13,14 +13,15 @@ protocol GetCardOcrResultPO: AnyObject {
     var getCardOcrResultResponse: GetCardOcrResultResponse? { get set }
     var getCardOcrResultChangeHandler: ((OCRChangeHandler) -> Void)? { get set }
     
-    func getCardOcrResult(url: String, input: UploadNewCardOcrImageInput)
+    func getCardOcrResult(url: String, input: UploadNewCardOcrImageInput, token: String)
 }
 
 extension GetCardOcrResultPO {
-    func getCardOcrResult(url: String, input: UploadNewCardOcrImageInput) {
+    func getCardOcrResult(url: String, input: UploadNewCardOcrImageInput, token: String) {
         emit(.isLoading(getCardOcrResultRequest, true))
         getCardOcrResultRequest = AppNetwork.shared.post(url: url,
                                                          input: input,
+                                                         token: token,
                                                          completionHandler: ({ (response: GetCardOcrResultResponse?,
                                                                                 error: ATPError?) in
             self.emit(.isLoading(self.getCardOcrResultRequest, false, completion: {
