@@ -20,7 +20,7 @@ public final class OCRView: UIView {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 16
-        layout.minimumInteritemSpacing = 12
+        layout.minimumInteritemSpacing = 8
         layout.sectionInset = .init(
             top: 16,
             left: 16,
@@ -109,7 +109,7 @@ extension OCRView: UICollectionViewDelegateFlowLayout, UICollectionViewDelegate 
                                sizeForItemAt indexPath: IndexPath) -> CGSize {
 
         let itemsPerRow: CGFloat = 4
-        let spacing: CGFloat = 12
+        let spacing: CGFloat = 8
         let horizontalInset: CGFloat = 32
 
         let totalSpacing =
