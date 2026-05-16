@@ -8,7 +8,7 @@
 import AyanTechNetworkingLibrary
 import Foundation
 
-protocol UploadNewCardOcrImagePO: AnyObject {
+public protocol UploadNewCardOcrImagePO: AnyObject {
     var userBasketAddBillsRequest: ATRequest? { get set }
     var userBasketAddBillsResponse: UploadNewCardOcrImageResponse? { get set }
     var userBasketAddBillsChangeHandler: ((OCRChangeHandler) -> Void)? { get set }

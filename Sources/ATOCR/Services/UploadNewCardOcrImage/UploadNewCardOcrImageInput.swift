@@ -5,7 +5,7 @@
 //  Created by Amir on 5/5/26.
 //
 
-struct UploadNewCardOcrImageInput: Codable {
+public struct UploadNewCardOcrImageInput: Codable {
     let imageArray: [String]
     let traceNumber: String
     let type: String

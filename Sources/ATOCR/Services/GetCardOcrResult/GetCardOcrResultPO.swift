@@ -8,7 +8,7 @@
 import AyanTechNetworkingLibrary
 import Foundation
 
-protocol GetCardOcrResultPO: AnyObject {
+public protocol GetCardOcrResultPO: AnyObject {
     var getCardOcrResultRequest: ATRequest? { get set }
     var getCardOcrResultResponse: GetCardOcrResultResponse? { get set }
     var getCardOcrResultChangeHandler: ((OCRChangeHandler) -> Void)? { get set }
