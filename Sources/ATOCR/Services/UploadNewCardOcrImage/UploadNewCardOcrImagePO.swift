@@ -9,26 +9,26 @@ import AyanTechNetworkingLibrary
 import Foundation
 
 public protocol UploadNewCardOcrImagePO: AnyObject {
-    var userBasketAddBillsRequest: ATRequest? { get set }
-    var userBasketAddBillsResponse: UploadNewCardOcrImageResponse? { get set }
-    var userBasketAddBillsChangeHandler: ((OCRChangeHandler) -> Void)? { get set }
+    var uploadNewCardOcrImageRequest: ATRequest? { get set }
+    var uploadNewCardOcrImageResponse: UploadNewCardOcrImageResponse? { get set }
+    var uploadNewCardOcrImageChangeHandler: ((OCRChangeHandler) -> Void)? { get set }
     
     func userBasketAddBills(url: String, input: UploadNewCardOcrImageInput, token: String)
 }
 
 public extension UploadNewCardOcrImagePO {
     func userBasketAddBills(url: String, input: UploadNewCardOcrImageInput, token: String) {
-        emit(.isLoading(userBasketAddBillsRequest, true))
-        userBasketAddBillsRequest = AppNetwork.shared.post(url: url,
-                                                           input: input,
-                                                           token: token,
-                                                           completionHandler: ({ (response: UploadNewCardOcrImageResponse?,
-                                                                                  error: ATPError?) in
-            self.emit(.isLoading(self.userBasketAddBillsRequest, false, completion: {
+        emit(.isLoading(uploadNewCardOcrImageRequest, true))
+        uploadNewCardOcrImageRequest = AppNetwork.shared.post(url: url,
+                                                              input: input,
+                                                              token: token,
+                                                              completionHandler: ({ (response: UploadNewCardOcrImageResponse?,
+                                                                                     error: ATPError?) in
+            self.emit(.isLoading(self.uploadNewCardOcrImageRequest, false, completion: {
                 if let error {
                     self.emit(.didError(error))
                 } else {
-                    self.userBasketAddBillsResponse = response
+                    self.uploadNewCardOcrImageResponse = response
                     self.emit(.didSuccess)
                 }
             }))
@@ -36,6 +36,6 @@ public extension UploadNewCardOcrImagePO {
     }
     
     func emit(_ change: OCRChangeHandler) {
-        userBasketAddBillsChangeHandler?(change)
+        uploadNewCardOcrImageChangeHandler?(change)
     }
 }
