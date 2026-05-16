@@ -16,7 +16,7 @@ public protocol UploadNewCardOcrImagePO: AnyObject {
     func userBasketAddBills(url: String, input: UploadNewCardOcrImageInput, token: String)
 }
 
-extension UploadNewCardOcrImagePO {
+public extension UploadNewCardOcrImagePO {
     func userBasketAddBills(url: String, input: UploadNewCardOcrImageInput, token: String) {
         emit(.isLoading(userBasketAddBillsRequest, true))
         userBasketAddBillsRequest = AppNetwork.shared.post(url: url,

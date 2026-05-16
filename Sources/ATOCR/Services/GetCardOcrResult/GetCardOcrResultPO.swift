@@ -16,7 +16,7 @@ public protocol GetCardOcrResultPO: AnyObject {
     func getCardOcrResult(url: String, input: UploadNewCardOcrImageInput, token: String)
 }
 
-extension GetCardOcrResultPO {
+public extension GetCardOcrResultPO {
     func getCardOcrResult(url: String, input: UploadNewCardOcrImageInput, token: String) {
         emit(.isLoading(getCardOcrResultRequest, true))
         getCardOcrResultRequest = AppNetwork.shared.post(url: url,
