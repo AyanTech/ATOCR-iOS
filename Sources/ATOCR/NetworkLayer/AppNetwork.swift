@@ -18,9 +18,12 @@ public final class AppNetwork: @unchecked Sendable {
     fileprivate func post<O: Decodable>(url: String,
                                         tokenValidationRequired: Bool,
                                         body: Encodable?,
+                                        token: String,
                                         parameterSelector: @escaping (ATResponse) -> Any?,
                                         completionHandler: @escaping (O?, ATPError?) -> Void) -> ATRequest {
-        self.post(url: url, tokenValidationRequired: tokenValidationRequired, body: body) { response in
+        self.post(url: url,
+                  tokenValidationRequired: tokenValidationRequired,
+                  body: body, token: token) { response in
             if response.isSuccess {
                 if response.parametersJsonArray == nil && response.parametersJsonObject == nil {
                     completionHandler(nil, nil)
@@ -45,11 +48,13 @@ public final class AppNetwork: @unchecked Sendable {
     fileprivate func post(url: String,
                           tokenValidationRequired: Bool,
                           body: Encodable?,
+                          token: String,
                           completionHandler: @escaping BaseResponseHandler) -> ATRequest {
         let request = ATRequest.request(url: url, method: .post)
         request.delegate = self
         request.setNeedsTokenValidation(tokenValidationRequired)
-        request.setJsonBody(body: self.getJsonBody(forInput: body), ignoreParameterCreator: true)
+        request.setJsonBody(body: self.getJsonBody(forInput: body, token: token),
+                            ignoreParameterCreator: true)
         request.send(responseHandler: completionHandler)
         return request
     }
@@ -57,10 +62,12 @@ public final class AppNetwork: @unchecked Sendable {
     func post<O: Decodable>(url: String,
                             tokenValidationRequired: Bool = false,
                             input: Encodable?,
+                            token: String,
                             completionHandler: @escaping (O?, ATPError?) -> Void) -> ATRequest {
         self.post(url: url,
                   tokenValidationRequired: tokenValidationRequired,
                   body: input,
+                  token: token,
                   parameterSelector: { $0.parametersJsonObject },
                   completionHandler: completionHandler)
     }
@@ -68,10 +75,12 @@ public final class AppNetwork: @unchecked Sendable {
     func post<O: Decodable>(url: String,
                             tokenValidationRequired: Bool = false,
                             input: Encodable?,
+                            token: String,
                             completionHandler: @escaping ([O]?, ATPError?) -> Void) -> ATRequest {
         self.post(url: url,
                   tokenValidationRequired: tokenValidationRequired,
                   body: input,
+                  token: token,
                   parameterSelector: { $0.parametersJsonArray },
                   completionHandler: completionHandler)
     }
@@ -79,10 +88,12 @@ public final class AppNetwork: @unchecked Sendable {
     func post(url: String,
               tokenValidationRequired: Bool = false,
               input: Encodable?,
+              token: String,
               completionHandler: @escaping (Int64?, String?) -> Void) -> ATRequest {
         self.post(url: url,
                   tokenValidationRequired: tokenValidationRequired,
-                  body: input) { response in
+                  body: input,
+                  token: token) { response in
             if response.isSuccess, let result: Int64 = getValue(input: response.responseJsonObject, subscripts: "Parameters") {
                 completionHandler(result, nil)
             } else {
@@ -92,10 +103,10 @@ public final class AppNetwork: @unchecked Sendable {
     }
 
     // MARK: - JSON Builder
-    public func getJsonBody(forInput input: Encodable?) -> JSONObject {
+    public func getJsonBody(forInput input: Encodable?, token: String) -> JSONObject {
         var result: JSONObject = [
             "Identity": [
-                "Token": ""
+                "Token": token
             ]
         ]
 
