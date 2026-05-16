@@ -54,15 +54,9 @@ public final class OCRView: UIView {
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .clear
-
+        OCRCollectionViewCell.register(for: view)
         view.dataSource = self
         view.delegate = self
-
-        view.register(
-            OCRCollectionViewCell.self,
-            forCellWithReuseIdentifier: OCRCollectionViewCell.nameOfClass
-        )
-
         return view
     }()
 
@@ -113,15 +107,11 @@ extension OCRView: UICollectionViewDataSource {
 
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: OCRCollectionViewCell.nameOfClass,
-            for: indexPath
-        ) as? OCRCollectionViewCell else {
-            return UICollectionViewCell()
-        }
-
-        cell.config(data: items[indexPath.item])
-        return cell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OCRCollectionViewCell.nameOfClass,
+                                                      for: indexPath) as? OCRCollectionViewCell
+        let data = items[indexPath.item]
+        cell?.config(data: data)
+        return cell ?? UICollectionViewCell()
     }
 }
 
