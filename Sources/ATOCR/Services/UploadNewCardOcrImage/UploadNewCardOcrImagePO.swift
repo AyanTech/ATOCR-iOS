@@ -13,11 +13,11 @@ public protocol UploadNewCardOcrImagePO: AnyObject {
     var uploadNewCardOcrImageResponse: UploadNewCardOcrImageResponse? { get set }
     var uploadNewCardOcrImageChangeHandler: ((OCRChangeHandler) -> Void)? { get set }
     
-    func userBasketAddBills(url: String, input: UploadNewCardOcrImageInput, token: String)
+    func uploadNewCardOcrImage(url: String, input: UploadNewCardOcrImageInput, token: String)
 }
 
 public extension UploadNewCardOcrImagePO {
-    func userBasketAddBills(url: String, input: UploadNewCardOcrImageInput, token: String) {
+    func uploadNewCardOcrImage(url: String, input: UploadNewCardOcrImageInput, token: String) {
         emit(.isLoading(uploadNewCardOcrImageRequest, true))
         uploadNewCardOcrImageRequest = AppNetwork.shared.post(url: url,
                                                               input: input,
