@@ -102,18 +102,29 @@ public final class OCRView: UIView {
             titleLabel,
             collectionView
         ])
-        
+
         stackView.axis = .vertical
         stackView.spacing = 16
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        
+
         addSubview(stackView)
-        
+
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: topAnchor, constant: 16),
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            stackView.topAnchor.constraint(
+                equalTo: topAnchor,
+                constant: 16
+            ),
+            stackView.leadingAnchor.constraint(
+                equalTo: leadingAnchor,
+                constant: 16
+            ),
+            stackView.trailingAnchor.constraint(
+                equalTo: trailingAnchor,
+                constant: -16
+            ),
+            stackView.bottomAnchor.constraint(
+                equalTo: bottomAnchor
+            )
         ])
     }
 }
