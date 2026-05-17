@@ -1,115 +1,268 @@
-# 🔍 ATOCR (AyanTech OCR)
+# ATOCR
 
-**ATOCR** is a Swift Package designed for **image preprocessing and OCR-ready workflows**.
-It helps you **optimize images (compression, resizing, formatting)** before sending them to OCR engines or backend services.
+A lightweight OCR toolkit for iOS built with UIKit.
 
-Built for **iOS (UIKit & SwiftUI)** with a focus on simplicity, performance, and scalability.
+ATOCR provides reusable UI components, camera handling,
+image compression, and OCR request helpers to simplify
+document scanning workflows.
+
+## Features
+
+- 📷 Camera capture manager
+- 🧩 Ready-to-use OCR selection view
+- 🖼 Image compression before upload
+- 🔄 OCR result polling support
+- ⚡ Protocol-oriented networking helpers
+- 🎯 UIKit-first design
 
 ---
 
-## ✨ Features
+## Requirements
 
-* 🖼 Image compression (size-based)
-* 📦 Convert images to Base64 (OCR-ready)
-* ⚙️ Configurable compression settings
-* 📱 UIKit & SwiftUI support
-* 🧱 Modular architecture (SPM)
-* 🔌 Ready to integrate with OCR APIs
+- iOS 13+
+- Swift 5.9+
+- UIKit
 
 ---
 
-## 📥 Installation
+## Installation
 
 ### Swift Package Manager
 
-Add via Xcode:
-
-```
-File → Add Packages…
-```
-
-Or manually:
+Add the package dependency:
 
 ```swift
-.package(url: "https://github.com/...", from: "1.0.0")
+dependencies: [
+    .package(
+        url: "https://github.com/your-username/ATOCR-iOS.git",
+        from: "1.0.0"
+    )
+]
 ```
+
+Or in Xcode:
+
+**File → Add Packages**
 
 ---
 
-## 🚀 Usage
+## OCRView
 
-### Basic Compression
+`OCRView` is a reusable UIKit component that displays OCR document options in a grid layout.
+
+### Features
+
+- Custom title
+- Configurable typography
+- Delegate-based selection
+- Responsive collection view layout
+
+### Example
 
 ```swift
-let compressor = ATOCRImageCompressor()
-let data = compressor.compress(image)
+let ocrView = OCRView()
+
+ocrView.title = "Select Document"
+ocrView.delegate = self
+ocrView.setItems(items)
 ```
 
----
-
-### Convert to Base64 (Recommended for OCR APIs)
+Receive selection:
 
 ```swift
-let base64 = compressor.compressBase64(image)
-```
+extension ViewController: OCRViewDelegate {
 
----
+    func ocrViewDidSelectItem(
+        _ item: OCRCollectionItem
+    ) {
 
-### Custom Configuration
-
-```swift
-let config = ATOCRImageCompressor.Config(
-    maxSizeMB: 1.0,
-    minQuality: 0.2,
-    resizeStep: 0.7
-)
-
-let compressor = ATOCRImageCompressor(config: config)
-let data = compressor.compress(image)
-```
-
----
-
-## 📱 UIKit Example
-
-```swift
-let compressor = ATOCRImageCompressor()
-
-camera.openCamera(from: self) { image in
-    guard let image else { return }
-    let base64 = compressor.compressBase64(image)
+    }
 }
 ```
 
 ---
 
+## Camera Manager
 
-## ⚙️ Configuration
+`ATOCRCameraManager` provides a lightweight wrapper around `UIImagePickerController`.
 
-| Parameter    | Description                      | Default |
-| ------------ | -------------------------------- | ------- |
-| `maxSizeMB`  | Maximum output size              | 6.0 MB  |
-| `minQuality` | Minimum JPEG compression quality | 0.1     |
-| `resizeStep` | Resize scale per iteration       | 0.8     |
+### Open Camera
+
+```swift
+let camera = ATOCRCameraManager()
+
+camera.delegate = self
+
+camera.openCamera(
+    from: self,
+    guid: "document-id"
+)
+```
+
+Receive captured image:
+
+```swift
+extension ViewController:
+    ATOCRCameraManagerDelegate {
+
+    func cameraManager(
+        _ manager: ATOCRCameraManager,
+        didCapture image: UIImage?,
+        guid: String?
+    ) {
+
+    }
+}
+```
 
 ---
 
-## 🧠 Why ATOCR?
+## Image Compression
 
-OCR systems work best with:
+Compress images before upload to reduce payload size.
 
-* optimized image size
-* reduced noise
-* consistent formats
+### Default Compression
 
-👉 ATOCR prepares images before sending them to OCR services, improving:
+```swift
+let compressor =
+    ATOCRImageCompressor()
 
-* speed ⚡
-* accuracy 🎯
-* bandwidth usage 📉
+let data =
+    compressor.compress(image)
+```
+
+### Base64 Output
+
+```swift
+let base64 =
+    compressor.compressBase64(image)
+```
+
+### Custom Configuration
+
+```swift
+let config =
+    ATOCRImageCompressor.Config(
+        maxSizeMB: 3,
+        minCompression: 0.2,
+        resizeStep: 0.9
+    )
+
+let compressor =
+    ATOCRImageCompressor(
+        config: config
+    )
+```
 
 ---
 
-## 🔒 Requirements
+## OCR Upload
 
-* iOS 13+
+Implement `UploadNewCardOcrImagePO`
+to upload OCR images.
+
+```swift
+final class ViewModel:
+    UploadNewCardOcrImagePO {
+
+}
+```
+
+Start upload:
+
+```swift
+uploadNewCardOcrImage(
+    url: url,
+    input: input,
+    token: token
+)
+```
+
+Handle changes:
+
+```swift
+changeHandler = { change in
+
+    switch change {
+
+    case .didSuccess:
+        break
+
+    case .didError(let message):
+        print(message)
+
+    default:
+        break
+    }
+}
+```
+
+---
+
+## OCR Result Polling
+
+Implement `GetCardOcrResultPO`
+to receive OCR results.
+
+```swift
+final class ViewModel:
+    GetCardOcrResultPO {
+
+}
+```
+
+Start request:
+
+```swift
+getCardOcrResult(
+    url: url,
+    input: input,
+    token: token
+)
+```
+
+The SDK automatically retries when
+OCR status is `pending`.
+
+---
+
+## OCR Flow
+
+```text
+Select Document
+      ↓
+Open Camera
+      ↓
+Capture Image
+      ↓
+Compress Image
+      ↓
+Upload Image
+      ↓
+Wait for OCR Result
+      ↓
+Receive OCR Data
+```
+
+---
+
+## Camera Permission
+
+Add this key to `Info.plist`:
+
+```xml
+<key>NSCameraUsageDescription</key>
+<string>Camera access is required for OCR scanning.</string>
+```
+
+---
+
+## Dependencies
+
+- AyanTechNetworkingLibrary
+
+---
+
+## License
+
+MIT
