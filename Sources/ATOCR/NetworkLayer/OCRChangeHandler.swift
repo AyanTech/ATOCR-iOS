@@ -10,5 +10,5 @@ import AyanTechNetworkingLibrary
 public enum OCRChangeHandler {
     case isLoading(ATRequest?, Bool)
     case didSuccess
-    case didError(ATPError)
+    case didError(String)
 }
