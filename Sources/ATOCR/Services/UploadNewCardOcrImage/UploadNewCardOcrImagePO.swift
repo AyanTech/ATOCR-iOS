@@ -10,6 +10,7 @@ import Foundation
 
 public protocol UploadNewCardOcrImagePO: AnyObject {
     var uploadNewCardOcrImageRequest: ATRequest? { get set }
+    var uploadNewCardOcrImageInput: UploadNewCardOcrImageInput? { get set }
     var uploadNewCardOcrImageResponse: UploadNewCardOcrImageResponse? { get set }
     var uploadNewCardOcrImageChangeHandler: ((OCRChangeHandler) -> Void)? { get set }
     
