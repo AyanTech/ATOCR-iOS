@@ -6,12 +6,12 @@
 //
 
 public struct GetCardOcrResultResponse: Decodable {
-    let cardID: String
-    let description: String
-    let nextCallInterval: Double
-    let result: OCRKeyValueModel
-    let retryable: Bool
-    let status: String
+    public let cardID: String
+    public let description: String
+    public let nextCallInterval: Double
+    public let result: OCRKeyValueModel
+    public let retryable: Bool
+    public let status: String
     
     enum CodingKeys: String, CodingKey {
         case cardID = "CardID"
@@ -24,8 +24,8 @@ public struct GetCardOcrResultResponse: Decodable {
 }
 
 public struct OCRKeyValueModel: Decodable {
-    let key: String
-    let value: String
+    public let key: String
+    public let value: String
     
     enum Coding: String, CodingKey {
         case key = "Key"

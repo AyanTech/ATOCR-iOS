@@ -6,7 +6,7 @@
 //
 
 public struct GetCardOcrResultInput: Codable {
-    let fileID: String
+    public let fileID: String
     
     public init(fileID: String) {
         self.fileID = fileID

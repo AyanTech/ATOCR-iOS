@@ -6,7 +6,7 @@
 //
 
 public struct UploadNewCardOcrImageResponse: Decodable {
-    let fileID: String?
+    public let fileID: String
 
     enum CodingKeys: String, CodingKey {
         case fileID = "FileID"
