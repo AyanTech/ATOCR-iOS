@@ -17,7 +17,7 @@ public struct GetCardOcrResultResponse: Decodable {
         case cardID = "CardID"
         case description = "Description"
         case nextCallInterval = "NextCallInterval"
-        case result = "result"
+        case result = "Result"
         case retryable = "Retryable"
         case status = "Status"
     }
