@@ -10,7 +10,7 @@ public struct UploadNewCardOcrImageInput: Codable {
     let traceNumber: String
     let type: String
 
-    init(imageArray: [String], traceNumber: String, type: OCRType) {
+    public init(imageArray: [String], traceNumber: String, type: OCRType) {
         self.imageArray = imageArray
         self.traceNumber = traceNumber
         self.type = type.rawValue

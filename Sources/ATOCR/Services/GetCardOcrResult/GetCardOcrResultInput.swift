@@ -7,7 +7,11 @@
 
 struct GetCardOcrResultInput: Codable {
     let fileID: String
-
+    
+    public init(fileID: String) {
+        self.fileID = fileID
+    }
+    
     enum CodingKeys: String, CodingKey {
         case fileID = "FileID"
     }
