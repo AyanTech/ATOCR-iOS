@@ -27,7 +27,7 @@ public struct OCRKeyValueModel: Decodable {
     public let key: String
     public let value: String
     
-    enum Coding: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case key = "Key"
         case value = "Value"
     }
