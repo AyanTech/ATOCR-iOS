@@ -54,7 +54,6 @@ public extension GetCardOcrResultPO {
                     self.emit(.didError(response.description ?? ""))
                     
                 case "pending":
-                    self.emit(.isLoading(self.getCardOcrResultRequest, false))
                     let delay = Double(response.nextCallInterval ?? 0) / 1000.0
                     DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
                         self?.getCardOcrResult(url: url, input: input, token: token)
