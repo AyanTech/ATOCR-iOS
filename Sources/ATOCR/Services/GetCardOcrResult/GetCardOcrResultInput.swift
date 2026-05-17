@@ -5,7 +5,7 @@
 //  Created by Amir on 5/5/26.
 //
 
-struct GetCardOcrResultInput: Codable {
+public struct GetCardOcrResultInput: Codable {
     let fileID: String
     
     public init(fileID: String) {
