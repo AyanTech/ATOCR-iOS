@@ -26,7 +26,7 @@ public extension UploadNewCardOcrImagePO {
                                                                                      error: ATPError?) in
             self.emit(.isLoading(self.uploadNewCardOcrImageRequest, false))
             if let error {
-                self.emit(.didError(error))
+                self.emit(.didError(error.persianDescription ?? "خطا در دریافت اطلاعات"))
             } else {
                 self.uploadNewCardOcrImageResponse = response
                 self.emit(.didSuccess)

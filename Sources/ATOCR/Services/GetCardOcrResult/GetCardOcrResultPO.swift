@@ -26,7 +26,7 @@ public extension GetCardOcrResultPO {
                                                                                 error: ATPError?) in
             self.emit(.isLoading(self.getCardOcrResultRequest, false))
             if let error {
-                self.emit(.didError(error))
+                self.emit(.didError(error.persianDescription ?? "خطا در دریافت اطلاعات"))
             } else {
                 if response?.retryable ?? false {
                     //                        DispatchQueue.main.asyncAfter(deadline: .now() + (response?.nextCallInterval ?? 0)) {
