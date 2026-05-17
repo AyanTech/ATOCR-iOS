@@ -24,20 +24,19 @@ public extension GetCardOcrResultPO {
                                                          token: token,
                                                          completionHandler: ({ (response: GetCardOcrResultResponse?,
                                                                                 error: ATPError?) in
-            self.emit(.isLoading(self.getCardOcrResultRequest, false, completion: {
-                if let error {
-                    self.emit(.didError(error))
+            self.emit(.isLoading(self.getCardOcrResultRequest, false))
+            if let error {
+                self.emit(.didError(error))
+            } else {
+                if response?.retryable ?? false {
+                    //                        DispatchQueue.main.asyncAfter(deadline: .now() + (response?.nextCallInterval ?? 0)) {
+                    //                            self.getCardOcrResult(url: url, input: input)
+                    //                        }
                 } else {
-                    if response?.retryable ?? false {
-//                        DispatchQueue.main.asyncAfter(deadline: .now() + (response?.nextCallInterval ?? 0)) {
-//                            self.getCardOcrResult(url: url, input: input)
-//                        }
-                    } else {
-                        self.getCardOcrResultResponse = response
-                        self.emit(.didSuccess)
-                    }
+                    self.getCardOcrResultResponse = response
+                    self.emit(.didSuccess)
                 }
-            }))
+            }
         }))
     }
     

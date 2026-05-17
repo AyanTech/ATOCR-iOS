@@ -8,7 +8,7 @@
 import AyanTechNetworkingLibrary
 
 public enum OCRChangeHandler {
-    case isLoading(ATRequest? = nil, Bool, completion: (() -> Void)? = nil)
+    case isLoading(ATRequest?, Bool)
     case didSuccess
     case didError(ATPError)
 }

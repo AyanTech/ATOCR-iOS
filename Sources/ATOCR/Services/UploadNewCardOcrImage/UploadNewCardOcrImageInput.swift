@@ -15,12 +15,6 @@ public struct UploadNewCardOcrImageInput: Codable {
         self.traceNumber = traceNumber
         self.type = type.rawValue
     }
-    
-    init(imageArray: [String], traceNumber: String, type: String) {
-        self.imageArray = imageArray
-        self.traceNumber = traceNumber
-        self.type = type
-    }
 
     enum CodingKeys: String, CodingKey {
         case imageArray = "ImageArray"

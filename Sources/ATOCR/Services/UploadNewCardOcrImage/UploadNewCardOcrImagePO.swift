@@ -24,14 +24,13 @@ public extension UploadNewCardOcrImagePO {
                                                               token: token,
                                                               completionHandler: ({ (response: UploadNewCardOcrImageResponse?,
                                                                                      error: ATPError?) in
-            self.emit(.isLoading(self.uploadNewCardOcrImageRequest, false, completion: {
-                if let error {
-                    self.emit(.didError(error))
-                } else {
-                    self.uploadNewCardOcrImageResponse = response
-                    self.emit(.didSuccess)
-                }
-            }))
+            self.emit(.isLoading(self.uploadNewCardOcrImageRequest, false))
+            if let error {
+                self.emit(.didError(error))
+            } else {
+                self.uploadNewCardOcrImageResponse = response
+                self.emit(.didSuccess)
+            }
         }))
     }
     
