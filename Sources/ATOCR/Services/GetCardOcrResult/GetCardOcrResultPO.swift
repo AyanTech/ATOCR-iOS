@@ -13,11 +13,11 @@ public protocol GetCardOcrResultPO: AnyObject {
     var getCardOcrResultResponse: GetCardOcrResultResponse? { get set }
     var getCardOcrResultChangeHandler: ((OCRChangeHandler) -> Void)? { get set }
     
-    func getCardOcrResult(url: String, input: UploadNewCardOcrImageInput, token: String)
+    func getCardOcrResult(url: String, input: GetCardOcrResultInput, token: String)
 }
 
 public extension GetCardOcrResultPO {
-    func getCardOcrResult(url: String, input: UploadNewCardOcrImageInput, token: String) {
+    func getCardOcrResult(url: String, input: GetCardOcrResultInput, token: String) {
         emit(.isLoading(getCardOcrResultRequest, true))
         getCardOcrResultRequest = AppNetwork.shared.post(url: url,
                                                          input: input,
@@ -28,14 +28,8 @@ public extension GetCardOcrResultPO {
             if let error {
                 self.emit(.didError(error.persianDescription ?? "خطا در دریافت اطلاعات"))
             } else {
-                if response?.retryable ?? false {
-                    //                        DispatchQueue.main.asyncAfter(deadline: .now() + (response?.nextCallInterval ?? 0)) {
-                    //                            self.getCardOcrResult(url: url, input: input)
-                    //                        }
-                } else {
-                    self.getCardOcrResultResponse = response
-                    self.emit(.didSuccess)
-                }
+                self.getCardOcrResultResponse = response
+                self.emit(.didSuccess)
             }
         }))
     }
