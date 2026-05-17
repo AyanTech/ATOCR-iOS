@@ -9,7 +9,7 @@ public struct GetCardOcrResultResponse: Decodable {
     public let cardID: String?
     public let description: String?
     public let nextCallInterval: Double?
-    public let result: OCRKeyValueModel?
+    public let result: [OCRKeyValueModel]?
     public let retryable: Bool?
     public let status: String
     
