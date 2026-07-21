@@ -5,118 +5,141 @@
 //  Created by Amir on 4/27/26.
 //
 //
+
 import Foundation
 import AyanTechNetworkingLibrary
-import SwiftBooster
 
 public final class AppNetwork: @unchecked Sendable {
 
     public static let shared = AppNetwork()
 
     private init() {}
-    
-    fileprivate func post<O: Decodable>(url: String,
-                                        tokenValidationRequired: Bool,
-                                        body: Encodable?,
-                                        token: String,
-                                        parameterSelector: @escaping (ATResponse) -> Any?,
-                                        completionHandler: @escaping (O?, ATPError?) -> Void) -> ATRequest {
-        self.post(url: url,
-                  tokenValidationRequired: tokenValidationRequired,
-                  body: body, token: token) { response in
-            if response.isSuccess {
-                if response.parametersJsonArray == nil && response.parametersJsonObject == nil {
-                    completionHandler(nil, nil)
-                } else {
-                    if let result = O(withJsonObject: parameterSelector(response)) {
-                        completionHandler(result, nil)
-                    } else {
-                        var invalidDataError = ATPError()
-                        invalidDataError.persianDescription = "مشکل در خواندن اطلاعات از سرور"
-                        completionHandler(nil, invalidDataError)
+
+    // MARK: - POST
+
+    @discardableResult
+    public func post<O: Decodable & Sendable>(url: String,
+                                              input: Encodable,
+                                              token: String,
+                                              completionHandler: @escaping @MainActor (O?, Error?) -> Void) -> ATRequest {
+        
+        post(url: url,
+             tokenValidationRequired: true,
+             body: input,
+             token: token,
+             completionHandler: completionHandler)
+    }
+
+    // MARK: - POST Internal
+    @discardableResult
+    private func post<O: Decodable & Sendable>(url: String,
+                                               tokenValidationRequired: Bool,
+                                               body: Encodable?,
+                                               token: String,
+                                               completionHandler: @escaping @MainActor (O?, Error?) -> Void) -> ATRequest {
+        let request = ATRequest.request(url: url, method: .post)
+        let jsonBody = getJsonBody(forInput: body, token: token)
+
+        request.setJsonBody(
+                body: jsonBody,
+                ignoreParameterCreator: true
+            )
+            .send { [weak self] response in
+                guard self != nil else { return }
+
+                let result: Result<O, Error> = Self.parseResponse(response)
+
+                Task { @MainActor in
+                    switch result {
+                    case .success(let object):
+                        completionHandler(object, nil)
+                    case .failure(let error):
+                        completionHandler(nil, error)
                     }
                 }
-            } else {
-                if response.status?.errorCodeString == "G00002" {
-                }
-                let error = ATPError(error: response.error, errorCodeString: response.status?.errorCodeString)
-                completionHandler(nil, error)
             }
-        }
-    }
-    
-    fileprivate func post(url: String,
-                          tokenValidationRequired: Bool,
-                          body: Encodable?,
-                          token: String,
-                          completionHandler: @escaping BaseResponseHandler) -> ATRequest {
-        let request = ATRequest.request(url: url, method: .post)
-        request.delegate = self
-        request.setNeedsTokenValidation(tokenValidationRequired)
-        request.setJsonBody(body: self.getJsonBody(forInput: body, token: token),
-                            ignoreParameterCreator: true)
-        request.send(responseHandler: completionHandler)
         return request
     }
     
-    func post<O: Decodable>(url: String,
-                            tokenValidationRequired: Bool = false,
-                            input: Encodable?,
-                            token: String,
-                            completionHandler: @escaping (O?, ATPError?) -> Void) -> ATRequest {
-        self.post(url: url,
-                  tokenValidationRequired: tokenValidationRequired,
-                  body: input,
-                  token: token,
-                  parameterSelector: { $0.parametersJsonObject },
-                  completionHandler: completionHandler)
+    public struct AppNetworkError: LocalizedError, Sendable {
+        public let message: String
+        public let isUnauthorized: Bool
     }
     
-    func post<O: Decodable>(url: String,
-                            tokenValidationRequired: Bool = false,
-                            input: Encodable?,
-                            token: String,
-                            completionHandler: @escaping ([O]?, ATPError?) -> Void) -> ATRequest {
-        self.post(url: url,
-                  tokenValidationRequired: tokenValidationRequired,
-                  body: input,
-                  token: token,
-                  parameterSelector: { $0.parametersJsonArray },
-                  completionHandler: completionHandler)
+    // MARK: - Response Parsing
+    private static func parseResponse<O: Decodable & Sendable>(_ response: ATResponse) -> Result<O, Error> {
+        let isUnauthorized = response.status?.errorCodeString == "G00002"
+        guard response.isSuccess else {
+            return .failure(
+                AppNetworkError(
+                    message: response.error?.persianDescription ?? "خطا در برقراری ارتباط با سرور",
+                    isUnauthorized: isUnauthorized
+                )
+            )
+        }
+        
+        guard let parameters = response.parametersJsonObject else {
+            return .failure(
+                AppNetworkError(
+                    message: response.error?.persianDescription ?? "خطا در دریافت اطلاعات",
+                    isUnauthorized: isUnauthorized
+                )
+            )
+        }
+        
+        do {
+            let data = try JSONSerialization.data(withJSONObject: parameters,
+                                                  options: [])
+            
+            let object = try JSONDecoder().decode(O.self,
+                                                  from: data)
+            return .success(object)
+            
+        } catch {
+            return .failure(
+                AppNetworkError(
+                    message: "مشکل در خواندن اطلاعات از سرور",
+                    isUnauthorized: false
+                )
+            )
+        }
     }
     
-    func post(url: String,
-              tokenValidationRequired: Bool = false,
-              input: Encodable?,
-              token: String,
-              completionHandler: @escaping (Int64?, String?) -> Void) -> ATRequest {
-        self.post(url: url,
-                  tokenValidationRequired: tokenValidationRequired,
-                  body: input,
-                  token: token) { response in
-            if response.isSuccess, let result: Int64 = getValue(input: response.responseJsonObject, subscripts: "Parameters") {
-                completionHandler(result, nil)
-            } else {
-                completionHandler(nil, response.error?.persianDescription)
+    // MARK: - Request Body
+    private func getJsonBody(forInput input: Encodable?, token: String) -> [String: Any] {
+        var parameters: [String: Any] = [:]
+        if let input {
+            let encoder = JSONEncoder()
+            if let data = try? encoder.encode(
+                AnyEncodable(input)
+            ),
+               let jsonObject = try? JSONSerialization.jsonObject(
+                with: data
+               ) as? [String: Any] {
+                parameters = jsonObject
             }
         }
-    }
-
-    // MARK: - JSON Builder
-    public func getJsonBody(forInput input: Encodable?, token: String) -> JSONObject {
-        var result: JSONObject = [
+        
+        return [
             "Identity": [
                 "Token": token
-            ]
+            ],
+            "Parameters": parameters
         ]
-
-        if let inputJson = input?.toJson() {
-            result["Parameters"] = inputJson
-        }
-
-        return result
     }
 }
 
-// MARK: - Delegate
-extension AppNetwork: ATRequestDelegate {}
+// MARK: - AnyEncodable
+private struct AnyEncodable: Encodable {
+    private let encodeClosure: (Encoder) throws -> Void
+    
+    init(_ value: Encodable) {
+        self.encodeClosure = { encoder in
+            try value.encode(to: encoder)
+        }
+    }
+
+    func encode(to encoder: Encoder) throws {
+        try encodeClosure(encoder)
+    }
+}
