@@ -11,7 +11,7 @@ import Foundation
 @MainActor
 public protocol GetCardOcrResultPO: AnyObject {
     var getCardOcrResultRequest: ATRequest? { get set }
-    var getCardOcrResultResponse: GetCardOcrResultResponse? { get set }
+    var getCardOcrResultResponse: OCRResult? { get set }
     var getCardOcrResultChangeHandler: ((OCRChangeHandler) -> Void)? { get set }
     
     func getCardOcrResult(url: String,
@@ -107,7 +107,7 @@ public extension GetCardOcrResultPO {
     // MARK: - Success
     private func handleSuccess(_ response: GetCardOcrResultResponse) {
         emit(.isLoading(getCardOcrResultRequest, false))
-        getCardOcrResultResponse = response
+        getCardOcrResultResponse = response.result
         emit(.didSuccess)
     }
     

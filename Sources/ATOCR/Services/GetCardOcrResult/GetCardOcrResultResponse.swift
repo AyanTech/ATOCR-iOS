@@ -5,11 +5,11 @@
 //  Created by Amir on 5/5/26.
 //
 
-public struct GetCardOcrResultResponse: Decodable, Sendable {
+struct GetCardOcrResultResponse: Decodable, Sendable {
     public let cardID: String?
     public let description: String?
     public let nextCallInterval: Double?
-    public let result: [OCRKeyValueModel]?
+    public let result: OCRResult?
     public let retryable: Bool?
     public let status: String
     
@@ -23,7 +23,9 @@ public struct GetCardOcrResultResponse: Decodable, Sendable {
     }
 }
 
-public struct OCRKeyValueModel: Decodable, Sendable {
+public typealias OCRResult = [OCRResultModel]
+
+public struct OCRResultModel: Decodable, Sendable {
     public let key: String
     public let value: String
     
