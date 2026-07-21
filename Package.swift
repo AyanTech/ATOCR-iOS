@@ -15,15 +15,13 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/AyanTech/AyanTechNetworkingLibrary-iOS", branch: "master"),
-        .package(url: "https://github.com/sepbehroozi/SwiftBooster.git", branch: "master"),
+        .package(url: "https://github.com/AyanTech/AyanTechNetworkingLibrary-iOS", .upToNextMajor(from: "1.8.0"))
     ],
     targets: [
         .target(
             name: "ATOCR",
             dependencies: [
                 .product(name: "AyanTechNetworkingLibrary", package: "AyanTechNetworkingLibrary-iOS"),
-                .product(name: "SwiftBooster", package: "SwiftBooster")
             ]
         ),
         .testTarget(

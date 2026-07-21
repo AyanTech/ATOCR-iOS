@@ -1,22 +1,13 @@
 {
-  "originHash" : "04e085dd110204d5f333bbbfddbe0b2f01db32cede9114ec9a07763c632b261e",
+  "originHash" : "4e36db2d75b92159676bd54b931430e1e2b9100673618675850a4261d7699eb6",
   "pins" : [
     {
       "identity" : "ayantechnetworkinglibrary-ios",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/AyanTech/AyanTechNetworkingLibrary-iOS",
       "state" : {
-        "branch" : "master",
-        "revision" : "23c5f645cba8a1278c17143fc3c686979eb64769"
-      }
-    },
-    {
-      "identity" : "swiftbooster",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/sepbehroozi/SwiftBooster.git",
-      "state" : {
-        "branch" : "master",
-        "revision" : "c92a3c2d6d8d5ceac401cf14dc89dc9277c6d5db"
+        "revision" : "9363318ceb325e18a561e2dc8e5497c873bfedaa",
+        "version" : "1.8.0"
       }
     }
   ],
