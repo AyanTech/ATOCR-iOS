@@ -11,4 +11,5 @@ public enum OCRChangeHandler {
     case isLoading(ATRequest?, Bool)
     case didSuccess
     case didError(String)
+    case didUnauthorized
 }
