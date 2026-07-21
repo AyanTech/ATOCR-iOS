@@ -5,7 +5,7 @@
 //  Created by Amir on 5/5/26.
 //
 
-public struct GetCardOcrResultResponse: Decodable {
+public struct GetCardOcrResultResponse: Decodable, Sendable {
     public let cardID: String?
     public let description: String?
     public let nextCallInterval: Double?
@@ -23,7 +23,7 @@ public struct GetCardOcrResultResponse: Decodable {
     }
 }
 
-public struct OCRKeyValueModel: Decodable {
+public struct OCRKeyValueModel: Decodable, Sendable {
     public let key: String
     public let value: String
     

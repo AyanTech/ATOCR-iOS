@@ -5,7 +5,7 @@
 //  Created by Amir on 5/5/26.
 //
 
-public struct UploadNewCardOcrImageResponse: Decodable {
+public struct UploadNewCardOcrImageResponse: Decodable, Sendable {
     public let fileID: String
 
     enum CodingKeys: String, CodingKey {

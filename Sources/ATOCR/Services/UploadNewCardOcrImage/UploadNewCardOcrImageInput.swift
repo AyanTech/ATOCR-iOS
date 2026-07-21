@@ -4,15 +4,25 @@
 //
 //  Created by Amir on 5/5/26.
 //
+import Foundation
 
 public struct UploadNewCardOcrImageInput: Codable {
     let imageArray: [String]
     let traceNumber: String
     let type: String
 
-    public init(imageArray: [String], traceNumber: String, type: OCRType) {
+    public init(imageArray: [String],
+                traceNumber: String,
+                type: OCRType) {
         self.imageArray = imageArray
         self.traceNumber = traceNumber
+        self.type = type.rawValue
+    }
+
+    public init(imageArray: [String],
+                type: OCRType) {
+        self.imageArray = imageArray
+        self.traceNumber = UUID().uuidString
         self.type = type.rawValue
     }
 
