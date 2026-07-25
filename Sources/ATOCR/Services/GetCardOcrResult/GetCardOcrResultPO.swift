@@ -33,15 +33,17 @@ public extension GetCardOcrResultPO {
                                                                                            error: Error?) in
             
             guard let self else { return }
-            if let error {
+            if let error = error as? OCRAppNetworkError {
                 self.handleError(
-                    error.localizedDescription
+                    error.message,
+                    isUnauthorized: false
                 )
                 return
             }
             
             guard let response else {
-                self.handleError("خطا در دریافت اطلاعات")
+                self.handleError("خطا در دریافت اطلاعات",
+                                 isUnauthorized: false)
                 return
             }
             
@@ -62,12 +64,13 @@ public extension GetCardOcrResultPO {
         switch response.status.lowercased() {
         case "failed":
             handleError(
-                response.description ?? "خطا در دریافت اطلاعات"
+                response.description ?? "خطا در دریافت اطلاعات",
+                isUnauthorized: false
             )
             
         case "pending":
             guard let nextCallInterval = response.nextCallInterval else {
-                handleError("خطا در دریافت اطلاعات")
+                handleError("خطا در دریافت اطلاعات", isUnauthorized: false)
                 return
             }
             retryGetCardOcrResult(after: Int(nextCallInterval),
@@ -113,9 +116,13 @@ public extension GetCardOcrResultPO {
     
     // MARK: - Error
     
-    private func handleError(_ message: String) {
+    private func handleError(_ message: String, isUnauthorized: Bool) {
         emit(.isLoading(getCardOcrResultRequest, false))
-        emit(.didError(message))
+        if isUnauthorized {
+            emit(.didUnauthorized)
+        } else {
+            emit(.didError(message))
+        }
     }
     
     // MARK: - Event

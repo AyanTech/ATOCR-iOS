@@ -26,6 +26,7 @@ public extension UploadNewCardOcrImagePO {
                                input: UploadNewCardOcrImageInput,
                                token: String) {
         emit(.isLoading(uploadNewCardOcrImageRequest, true))
+        ATRequest.Configuration.timeout = 120
         uploadNewCardOcrImageRequest = AppNetwork.shared.post(url: url,
                                                               input: input,
                                                               token: token,
@@ -34,13 +35,17 @@ public extension UploadNewCardOcrImagePO {
             
             guard let self else { return }
             
-            if let error {
-                self.handleError(error.localizedDescription)
+            if let error = error as? OCRAppNetworkError {
+                self.handleError(
+                    error.message,
+                    isUnauthorized: error.isUnauthorized
+                )
                 return
             }
             
             guard let response else {
-                self.handleError("خطا در دریافت اطلاعات")
+                self.handleError("خطا در دریافت اطلاعات",
+                                 isUnauthorized: false)
                 return
             }
             
@@ -57,9 +62,13 @@ public extension UploadNewCardOcrImagePO {
     }
     
     // MARK: - Error
-    private func handleError(_ message: String) {
+    private func handleError(_ message: String, isUnauthorized: Bool) {
         emit(.isLoading(uploadNewCardOcrImageRequest, false))
-        emit(.didError(message))
+        if isUnauthorized {
+            emit(.didUnauthorized)
+        } else {
+            emit(.didError(message))
+        }
     }
     
     // MARK: - Event
