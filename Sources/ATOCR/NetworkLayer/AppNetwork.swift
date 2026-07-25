@@ -9,6 +9,11 @@
 import Foundation
 import AyanTechNetworkingLibrary
 
+struct OCRAppNetworkError: LocalizedError, Sendable {
+    let message: String
+    let isUnauthorized: Bool
+}
+
 public final class AppNetwork: @unchecked Sendable {
 
     public static let shared = AppNetwork()
@@ -61,17 +66,12 @@ public final class AppNetwork: @unchecked Sendable {
         return request
     }
     
-    public struct AppNetworkError: LocalizedError, Sendable {
-        public let message: String
-        public let isUnauthorized: Bool
-    }
-    
     // MARK: - Response Parsing
     private static func parseResponse<O: Decodable & Sendable>(_ response: ATResponse) -> Result<O, Error> {
         let isUnauthorized = response.status?.errorCodeString == "G00002"
         guard response.isSuccess else {
             return .failure(
-                AppNetworkError(
+                OCRAppNetworkError(
                     message: response.error?.persianDescription ?? "خطا در برقراری ارتباط با سرور",
                     isUnauthorized: isUnauthorized
                 )
@@ -80,7 +80,7 @@ public final class AppNetwork: @unchecked Sendable {
         
         guard let parameters = response.parametersJsonObject else {
             return .failure(
-                AppNetworkError(
+                OCRAppNetworkError(
                     message: response.error?.persianDescription ?? "خطا در دریافت اطلاعات",
                     isUnauthorized: isUnauthorized
                 )
@@ -97,7 +97,7 @@ public final class AppNetwork: @unchecked Sendable {
             
         } catch {
             return .failure(
-                AppNetworkError(
+                OCRAppNetworkError(
                     message: "مشکل در خواندن اطلاعات از سرور",
                     isUnauthorized: false
                 )
