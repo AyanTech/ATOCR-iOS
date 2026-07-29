@@ -2,26 +2,25 @@
 
 A lightweight OCR toolkit for iOS built with UIKit.
 
-ATOCR provides reusable UI components, camera handling,
-image compression, and OCR request helpers to simplify
-document scanning workflows.
+ATOCR provides reusable tools for document scanning workflows, including camera capture, image compression, and a simple `OCRUseCase` for processing OCR requests and retrieving results.
 
 ## Features
 
-- 📷 Camera capture manager
-- 🧩 Ready-to-use OCR selection view
-- 🖼 Image compression before upload
-- 🔄 OCR result polling support
-- ⚡ Protocol-oriented networking helpers
-- 🎯 UIKit-first design
+* 📷 Camera capture manager
+* 🖼 Image compression before upload
+* 🔄 Automatic OCR result polling
+* ⚡ Combine-based OCR workflow
+* 🎯 UIKit-first design
+* 📱 iOS 13+ support
 
 ---
 
 ## Requirements
 
-- iOS 13+
-- Swift 5.9+
-- UIKit
+* iOS 13+
+* Swift 5.9+
+* UIKit
+* Combine
 
 ---
 
@@ -34,7 +33,7 @@ Add the package dependency:
 ```swift
 dependencies: [
     .package(
-        url: "https://github.com/your-username/ATOCR-iOS.git",
+        url: "https://github.com/AyanTech/ATOCR-iOS",
         from: "1.0.0"
     )
 ]
@@ -43,42 +42,6 @@ dependencies: [
 Or in Xcode:
 
 **File → Add Packages**
-
----
-
-## OCRView
-
-`OCRView` is a reusable UIKit component that displays OCR document options in a grid layout.
-
-### Features
-
-- Custom title
-- Configurable typography
-- Delegate-based selection
-- Responsive collection view layout
-
-### Example
-
-```swift
-let ocrView = OCRView()
-
-ocrView.title = "Select Document"
-ocrView.delegate = self
-ocrView.setItems(items)
-```
-
-Receive selection:
-
-```swift
-extension ViewController: OCRViewDelegate {
-
-    func ocrViewDidSelectItem(
-        _ item: OCRCollectionItem
-    ) {
-
-    }
-}
-```
 
 ---
 
@@ -156,73 +119,95 @@ let compressor =
 
 ---
 
-## OCR Upload
+## OCRUseCase
 
-Implement `UploadNewCardOcrImagePO`
-to upload OCR images.
+`OCRUseCase` is the main interface for executing the OCR workflow.
 
-```swift
-final class ViewModel:
-    UploadNewCardOcrImagePO {
+It handles OCR result processing and automatically polls the OCR service while the result is in a `pending` state.
 
-}
-```
+The polling logic is handled internally, so consumers do not need to implement timers or recursive requests.
 
-Start upload:
+### Execute OCR
 
 ```swift
-uploadNewCardOcrImage(
+let cancellable = useCase.execute(
     url: url,
-    input: input,
-    token: token
+    token: token,
+    input: input
+)
+.sink(
+    receiveCompletion: { completion in
+
+        switch completion {
+
+        case .finished:
+            break
+
+        case .failure(let error):
+            print(error)
+        }
+    },
+    receiveValue: { result in
+
+        print(result)
+    }
 )
 ```
 
-Handle changes:
+### Result Type
+
+The OCR result is returned as:
 
 ```swift
-changeHandler = { change in
+AnyPublisher<OCRResultModel, ATErrorV2>
+```
 
-    switch change {
+Handle the result using Combine:
 
-    case .didSuccess:
-        break
+```swift
+cancellable = useCase.execute(
+    url: url,
+    token: token,
+    input: input
+)
+.receive(on: DispatchQueue.main)
+.sink(
+    receiveCompletion: { completion in
 
-    case .didError(let message):
-        print(message)
+        if case .failure(let error) = completion {
+            print("OCR Error:", error)
+        }
+    },
+    receiveValue: { result in
 
-    default:
-        break
+        print("OCR Result:", result)
     }
-}
+)
 ```
 
 ---
 
 ## OCR Result Polling
 
-Implement `GetCardOcrResultPO`
-to receive OCR results.
+When the OCR service returns a `pending` status, `OCRUseCase` automatically waits for the specified `NextCallInterval` and requests the result again.
 
-```swift
-final class ViewModel:
-    GetCardOcrResultPO {
-
-}
+```text
+Execute OCR Request
+        ↓
+Receive OCR Response
+        ↓
+    Is Pending?
+      /     \
+    Yes      No
+     ↓        ↓
+ Wait        Return Result
+     ↓
+ Request Again
+     ↓
+    Repeat
 ```
 
-Start request:
-
-```swift
-getCardOcrResult(
-    url: url,
-    input: input,
-    token: token
-)
-```
-
-The SDK automatically retries when
-OCR status is `pending`.
+The consumer does not need to manage polling, delays, or repeated network requests.
 
 ---
 
@@ -237,18 +222,20 @@ Capture Image
       ↓
 Compress Image
       ↓
-Upload Image
+Execute OCRUseCase
       ↓
 Wait for OCR Result
       ↓
-Receive OCR Data
+Poll While Pending
+      ↓
+Receive OCRResultModel
 ```
 
 ---
 
 ## Camera Permission
 
-Add this key to `Info.plist`:
+Add the following key to your `Info.plist`:
 
 ```xml
 <key>NSCameraUsageDescription</key>
@@ -259,10 +246,13 @@ Add this key to `Info.plist`:
 
 ## Dependencies
 
-- AyanTechNetworkingLibrary
+* AyanTechNetworkingLibrary
+* Combine
 
 ---
 
 ## License
 
 MIT
+
+```
