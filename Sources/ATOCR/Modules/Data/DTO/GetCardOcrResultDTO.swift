@@ -46,3 +46,13 @@ struct OCRResultModelDTO: Decodable, Sendable {
         case value = "Value"
     }
 }
+
+enum ResultStatusEnum: String {
+    case pending = "Pending"
+    case failed = "Failed"
+    case successful = "Successful"
+    
+    var lowercased: String {
+        return rawValue.lowercased()
+    }
+}

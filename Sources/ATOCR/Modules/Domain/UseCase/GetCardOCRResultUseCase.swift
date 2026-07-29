@@ -58,16 +58,23 @@ struct GetCardOCRResultUseCase: GetCardOCRResultUseCaseProtocol {
 
             switch response.status.lowercased() {
 
-            case "failed":
-                return Fail<GetCardOCRResultReponseDTO, ATErrorV2>(
-                    error: ATErrorV2.init(errorType: .api,
-                                          status: ATStatusV2(message: response.description ?? ""))
+            case ResultStatusEnum.failed.lowercased:
+                return Fail<OCRResultModel, ATErrorV2>(
+                    error: ATErrorV2(
+                        errorType: .api,
+                        status: ATStatusV2(
+                            message: response.description ?? ""
+                        )
+                    )
                 )
-                .map(mapper.toUI(_:))
                 .eraseToAnyPublisher()
 
-            case "pending":
-                let delay = (response.nextCallInterval ?? 0) / 1000.0
+            case ResultStatusEnum.pending.lowercased:
+
+                let delay = max(
+                    (response.nextCallInterval ?? 0) / 1000.0,
+                    0.5
+                )
 
                 return Just(())
                     .delay(
@@ -85,10 +92,26 @@ struct GetCardOCRResultUseCase: GetCardOCRResultUseCaseProtocol {
                     }
                     .eraseToAnyPublisher()
 
-            default:
-                return Just(mapper.toUI(response))
+            case ResultStatusEnum.successful.lowercased:
+                let mappedData = mapper.toUI(response)
+                guard !mappedData.isEmpty else {
+                    return Fail<OCRResultModel, ATErrorV2>(
+                        error: ATErrorV2(errorType: .serialization)
+                    )
+                    .eraseToAnyPublisher()
+                }
+
+                return Just(mappedData)
                     .setFailureType(to: ATErrorV2.self)
                     .eraseToAnyPublisher()
+
+            default:
+                return Fail<OCRResultModel, ATErrorV2>(
+                    error: ATErrorV2(
+                        errorType: .serialization
+                    )
+                )
+                .eraseToAnyPublisher()
             }
         }
         .eraseToAnyPublisher()
