@@ -1,13 +1,13 @@
 {
-  "originHash" : "4e36db2d75b92159676bd54b931430e1e2b9100673618675850a4261d7699eb6",
+  "originHash" : "724d37ad119eef7b10d36c99cb820c3030a819fcfc534c58ef1126c9f642bb82",
   "pins" : [
     {
       "identity" : "ayantechnetworkinglibrary-ios",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/AyanTech/AyanTechNetworkingLibrary-iOS",
       "state" : {
-        "revision" : "9363318ceb325e18a561e2dc8e5497c873bfedaa",
-        "version" : "1.8.0"
+        "revision" : "d346e4d14099885734afbcce9dd2e5ac8cef94c8",
+        "version" : "2.0.0"
       }
     }
   ],
